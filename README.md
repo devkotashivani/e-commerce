@@ -1,5 +1,5 @@
 #
-1. react-bootstrap
+1. react-bootstrap bootstrap
 2. Firebase
 3. React-router-dom
 4. react-icons
