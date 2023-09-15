@@ -40,8 +40,8 @@ function SideBar() {
         <hr />
         <div>
           <ul className="list-unstyled">
-            {sideLinks.map(({ label, path }) => (
-              <li className="p-2 ms-2 ">
+            {sideLinks.map(({ label, path, i }) => (
+              <li className="p-2 ms-2 " key={i}>
                 <Link className="nav-link" to={path}>{label}</Link>
               </li>
             ))}
