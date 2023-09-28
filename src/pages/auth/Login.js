@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import CustomInput from "../../component/customInput/CustomInput";
-import Header from "../../component/layout/Header";
-import Footer from "../../component/layout/Footer";
-import {loginAdminUser} from "../../redux/auth/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CustomInput from "../../components/custom-input/CustomInput";
+import Footer from "../../components/layout/Footer";
+import Header from "../../components/layout/Header";
+import { loginAdminUser } from "../../redux/auth/userAction";
 
 function Login() {
   const [form, setForm] = useState({});
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.userInfo);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.userInfo);
   useEffect(() => {
     if (user.uid) {
       navigate("/dashboard");
     }
   }, [user, navigate]);
-
-  const inputs = [
+  const inputFields = [
     {
       label: "Email",
-      type: "email",
       name: "email",
-      placeholder: "sam@gmail.com",
-      required: true,
+      type: "email",
+      placeholder: "abc@domain.com",
     },
     {
       label: "Password",
-      type: "password",
       name: "password",
+      type: "password",
       placeholder: "******",
-      required: true,
     },
   ];
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -42,30 +40,30 @@ function Login() {
       [name]: value,
     });
   };
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data", form);
     dispatch(loginAdminUser(form));
   };
   return (
-    <div>
+    <>
       <Header />
       <main className="main">
         <Form
           onSubmit={handleOnSubmit}
-          className="login p-5 mt-5 border rounded shadow"
+          className="login border p-5 shadow-lg rounded mt-5"
         >
-          {inputs.map((input) => (
-            <CustomInput onChange={handleOnChange} {...input} />
+          {inputFields.map((item) => (
+            <CustomInput {...item} onChange={handleOnChange} />
           ))}
-
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

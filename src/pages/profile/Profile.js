@@ -1,12 +1,8 @@
-import React from 'react'
-import AdminLayout from '../../component/layout/AdminLayout'
+import React from "react";
+import AdminLayout from "../../components/layout/AdminLayout";
 
 function Profile() {
-  return (
-    <div>
-      <AdminLayout title="Profile"></AdminLayout>
-    </div>
-  )
+  return <AdminLayout title="Profile"></AdminLayout>;
 }
 
-export default Profile
+export default Profile;

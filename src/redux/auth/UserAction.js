@@ -1,40 +1,37 @@
-
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig/config";
-import { toast } from "react-toastify";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { setUser } from "./UserSlice";
+import { toast } from "react-toastify";
+import { auth, db } from "../../firebase-config";
+import { setUser, updateStatus } from "./userSlice";
 
 export const createNewAdminUser = (userInfo) => async (dispatch) => {
-    try {
-      
-      // 1. use firebase auth to createUser
-      const resPending = createUserWithEmailAndPassword(
-        auth,
-        userInfo.email,
-        userInfo.password
-      );
-      toast.promise(resPending, {
-        pending: "In Progress...",
-      });
-  
-      const { user } = await resPending;
+  try {
+    dispatch(updateStatus({ progress: true, success: false, error: false }));
+    // 1. use firebase auth to createUser
+    const resPending = createUserWithEmailAndPassword(
+      auth,
+      userInfo.email,
+      userInfo.password
+    );
 
-      // 2. Use firebase storage to save the user info in DB
-      console.log(user)
-  
-      const { email, phone, fName, lName } = userInfo;
-      const data = { email, phone, fName, lName };
-      await setDoc(doc(db, "users", user.uid), data);
+    const { user } = await resPending;
 
-      toast.success("New User Registered")
-  
-      
-    } catch (e) {
-      toast.error("Error", e.message);
-      
-    }
-  };
+    // 2. Use firebase storage to sae the user info in DB
+
+    const { email, phone, fName, lName } = userInfo;
+    const data = { email, phone, fName, lName };
+    await setDoc(doc(db, "users", user.uid), data);
+
+    dispatch(updateStatus({ progress: false, success: true, error: false }));
+  } catch (e) {
+    console.log("error", e);
+    // toast.error("Error", e.message);
+    dispatch(updateStatus({ progress: false, success: false, error: true }));
+  }
+};
 
 // Check if valid user trying to login then get user info from db and set userinfo to store
 export const loginAdminUser =
@@ -45,9 +42,7 @@ export const loginAdminUser =
       toast.promise(authSnapPromise, {
         pending: "In Progress...",
       });
-      console.log(authSnapPromise)
       const { user } = await authSnapPromise;
-      console.log(user)
       dispatch(getUserInfo(user.uid));
       toast.success("Login Success");
       //   const userResponse = await authSnapPromise;
@@ -59,15 +54,15 @@ export const loginAdminUser =
 
 // it grabs the user info from DB and set it to redux store
 export const getUserInfo = (uid) => async (dispatch) => {
-    try {
-      const userSnap = await getDoc(doc(db, "users", uid));
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        const updatedUser = { ...userData, uid };
-        dispatch(setUser(updatedUser));
-      }
-    } catch (e) {
-      toast.error(e.message);
+  try {
+    console.log(uid);
+    const userSnap = await getDoc(doc(db, "users", uid));
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      const updatedUser = { ...userData, uid };
+      dispatch(setUser(updatedUser));
     }
-  };
-
+  } catch (e) {
+    toast.error(e.message);
+  }
+};

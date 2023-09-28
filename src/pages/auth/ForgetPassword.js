@@ -1,17 +1,7 @@
-import React from 'react'
-import Header from '../../component/layout/Header'
-import Footer from '../../component/layout/Footer'
+import React from "react";
 
 function ForgetPassword() {
-  return (
-    <div>
-      <Header/>
-       <main className='main'>
-        HI
-       </main>
-      <Footer />
-    </div>
-  )
+  return <div>ForgetPassword</div>;
 }
 
-export default ForgetPassword
+export default ForgetPassword;

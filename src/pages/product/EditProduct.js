@@ -2,18 +2,18 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
-import NewProductForm from "../../components/product/NewProductForm";
+import EditProductForm from "../../components/product/EditProductForm";
 
-function AddNewProduct() {
+function EditProduct() {
   return (
-    <AdminLayout title="Add Product">
+    <AdminLayout title="Edit Product">
       <Link to={"/product"}>
         <Button variant="secondary ms-2">&lt; Go Back</Button>
       </Link>
       {/* Form to capture the data */}
-      <NewProductForm />
+      <EditProductForm />
     </AdminLayout>
   );
 }
 
-export default AddNewProduct;
+export default EditProduct;

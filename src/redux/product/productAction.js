@@ -7,59 +7,56 @@ import {
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../firebase-config";
-import { TBL_CATEGORY } from "../../utils/const";
-import { setModalShow } from "../systemState/systemSlice";
-import { setCategoryList } from "./categorySlice";
+import { TBL_PRODUCT } from "../../utils/const";
+import { setProductList } from "./productSlice";
 
-// SetDoc : It will either create or Update
-export const addCategoryAction =
+export const addProductAction =
   ({ slug, ...rest }) =>
   async (dispatch) => {
     try {
-      const catPromise = setDoc(doc(db, TBL_CATEGORY, slug), rest, {
+      const productPromise = setDoc(doc(db, TBL_PRODUCT, slug), rest, {
         merge: true,
       });
-      toast.promise(catPromise, {
+      toast.promise(productPromise, {
         pending: "In Progress...",
         error: "Error...",
         success: "Successfully Saved",
       });
-      dispatch(fetchCategoriesAction());
+      await productPromise;
+      dispatch(fetchProductsAction());
     } catch (e) {
       console.log("error", e);
       toast.error("Error", e.message);
     }
   };
 
-export const fetchCategoriesAction = () => async (dispatch) => {
+export const fetchProductsAction = () => async (dispatch) => {
   try {
-    const querySnapshot = await getDocs(collection(db, TBL_CATEGORY));
-    console.log(querySnapshot);
-    const catList = [];
+    const querySnapshot = await getDocs(collection(db, TBL_PRODUCT));
+    const productList = [];
     querySnapshot.forEach((doc) => {
       const slug = doc.id;
       const data = doc.data();
-      catList.push({
+      productList.push({
         ...data,
         slug,
       });
     });
-    dispatch(setCategoryList(catList));
+    dispatch(setProductList(productList));
   } catch (e) {
     toast.error(e.message);
   }
 };
 
-export const deleteCategoryAction = (slug) => async (dispatch) => {
+export const deleteProductAction = (slug) => async (dispatch) => {
   try {
-    const deletePromise = deleteDoc(doc(db, TBL_CATEGORY, slug));
+    const deletePromise = deleteDoc(doc(db, TBL_PRODUCT, slug));
     toast.promise(deletePromise, {
       pending: "In Progress...",
       error: "Error...",
       success: "Successfully Removed",
     });
     await deletePromise;
-    dispatch(setModalShow(false));
-    dispatch(fetchCategoriesAction());
+    dispatch(fetchProductsAction());
   } catch (error) {}
 };

@@ -4,7 +4,6 @@ const initialState = {
   categoryList: [],
   selectedCategory: {},
 };
-
 const categorySlice = createSlice({
   name: "category",
   initialState,

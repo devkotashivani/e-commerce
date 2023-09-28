@@ -1,10 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./auth/UserSlice";
-import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
+import storage from "redux-persist/lib/storage";
+
+import { configureStore } from "@reduxjs/toolkit";
 import persistReducer from "redux-persist/es/persistReducer";
-import categoryReducer from "./category/CategorySlice";
-import productReducer from "./poduct/ProductSlice";
+import userReducer from "./auth/userSlice";
+import categoryReducer from "./category/categorySlice";
+import productReducer from "./product/productSlice";
 import systemReducer from "./systemState/systemSlice";
 
 const reducers = combineReducers({

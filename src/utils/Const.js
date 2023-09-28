@@ -1,2 +1,2 @@
-export const TBL_CATEGORY = "categories"
-export const TBL_PRODUCT = "PRODUCT"
+export const TBL_CATEGORY = "category";
+export const TBL_PRODUCT = "product";

@@ -1,88 +1,88 @@
-import React, { useState } from 'react'
-import AdminLayout from '../../component/layout/AdminLayout'
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import { useDispatch, useSelector } from "react-redux";
+import CustomInput from "../../components/custom-input/CustomInput";
+import AdminLayout from "../../components/layout/AdminLayout";
+import { createNewAdminUser } from "../../redux/auth/userAction";
 
-import { Button, Form } from 'react-bootstrap';
-import CustomInput from '../../component/customInput/CustomInput';
-import { createNewAdminUser } from '../../redux/auth/UserAction';
-import { useDispatch } from 'react-redux';
-
-function Register() {
-  const [form, setForm] = useState({})
+export default function Register() {
+  const [form, setForm] = useState({});
   const dispatch = useDispatch();
-  const inputs = [
-    
+  const { progress, error, success } = useSelector((state) => state.userInfo);
+  const inputFields = [
     {
-      label: "First Name",
+      label: "First Name *",
       name: "fName",
       type: "text",
       placeholder: "Sam",
       required: true,
     },
     {
-      label: "Last Name",
+      label: "Last Name *",
       name: "lName",
       type: "text",
-      placeholder: "Smith",
+      placeholder: "Sung",
       required: true,
     },
     {
-      label: "Phone Number",
+      label: "Phone",
       name: "phone",
       type: "number",
-      placeholder: "046xxxxxx",
-      required: true,
+      placeholder: "043xxxx",
     },
     {
-      label: "Email",
+      label: "Email *",
       name: "email",
       type: "email",
-      placeholder: "sam@gmail.com",
+      placeholder: "abc@domain.com",
       required: true,
     },
     {
-      label: "Password",
+      label: "Password *",
       name: "password",
       type: "password",
       placeholder: "******",
       required: true,
     },
     {
-      label: "Confirm Password",
-      name: "cPassword",
+      label: "Confirm Password *",
+      name: "confirmPassword",
       type: "password",
       placeholder: "******",
       required: true,
     },
-    
   ];
-  const handleOnChange = (e)=>{
-    const {name, value } = e.target;
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [name]:value,
-    })
-    
-  }
+      [name]: value,
+    });
+  };
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data", form);
     dispatch(createNewAdminUser(form));
   };
   return (
-    <div>
-      <AdminLayout title="Register Admin">
-      <Form onSubmit={handleOnSubmit} className="login p-5 mt-5 border rounded shadow">
-          {inputs.map((input) => (
-            <CustomInput onChange={handleOnChange} {...input} />
-          ))}
-
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </AdminLayout>
-    </div>
-  )
+    <AdminLayout title="Register Admin">
+      {progress === true && `Loading...`}
+      {error === true && `Error...`}
+      {success === true && `Success...`}
+      <Form
+        onSubmit={handleOnSubmit}
+        className="login border p-5 shadow-lg rounded mt-3 mb-2"
+      >
+        {inputFields.map((item) => (
+          <CustomInput {...item} onChange={handleOnChange} />
+        ))}
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+    </AdminLayout>
+  );
 }
-
-export default Register
